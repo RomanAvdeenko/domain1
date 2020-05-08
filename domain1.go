@@ -1,13 +1,22 @@
 package domain1
 
-import "log"
+import (
+	"log"
+	"math/rand"
+	"time"
+)
 
 //
 type Man struct {
 	Name string
 }
 
-func (m *Man) TurnOnWashingMachine() {}
+func (m *Man) TurnOnWashingMachine(cp WMCP) {
+	cp.TurnOn()
+}
+func (m *Man) TurnOffWashingMachine(cp WMCP) {
+	cp.TurnOff()
+}
 
 //
 type WashingMachine struct {
@@ -18,15 +27,24 @@ type WashingMachine struct {
 }
 
 func (m *WashingMachine) TurnOn() (err error) {
-	log.Printf("Machine %q, serial: %s is turn On.", m.BrandName, m.SerialNumber)
+	log.Printf("Washing machine serial: %s turn On.", m.SerialNumber)
+	m.makeWashing()
 	return nil
 }
 
-func (m *WashingMachine) TurnOf() (err error) {
-	log.Printf("Machine %q, serial: %s is turn Off.", m.BrandName, m.SerialNumber)
+func (m *WashingMachine) TurnOff() (err error) {
+	log.Printf("Waching machine serial: %s turn Off.", m.SerialNumber)
+	return nil
+}
+func (m *WashingMachine) makeWashing() (err error) {
+	log.Printf("Waching machine serial: %s start washing.", m.SerialNumber)
+	time.Sleep(time.Second*4 + time.Second*time.Duration(rand.Intn(4)))
+	log.Printf("Waching machine serial: %s finish washing.", m.SerialNumber)
 	return nil
 }
 
 // WMCP implements Washing MAchine Controp Panel
 type WMCP interface {
+	TurnOn() error
+	TurnOff() error
 }
